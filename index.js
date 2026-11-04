@@ -22,7 +22,49 @@ export async function connectToMongoDB() {
     console.dir(err);
   }
 }
-    await connectToMongoDB();
+   const mongoClient = await connectToMongoDB();
+const db = mongoClient.db("socialService");
+const createEventCollection = db.collection("createEvent");
+
+// app.post("/add-event", (req, res) => {
+//   const data = req.body;
+//   const result = createEventCollection.insertOne(data);
+//   res.send(result);
+// });
+
+// app.get("/createEvent", async (req, res) => {
+//   const result = await createEventCollection.find().toArray();
+//   res.send(result);
+// });
+
+
+app.post("/add-event", async (req, res) => {
+  try {
+    const data = req.body;
+
+    const result = await createEventCollection.insertOne(data);
+
+    res.send(result);
+  } catch (error) {
+    res.status(500).send({
+      message: "Failed to create event",
+    });
+  }
+});
+
+app.get("/createEvent", async (req, res) => {
+  try {
+    const result = await createEventCollection.find().toArray();
+
+    res.send(result);
+  } catch (error) {
+    res.status(500).send({
+      message: "Failed to get events",
+    });
+  }
+});
+
+
 
 // Home Route
 app.get("/", (req, res) => {
