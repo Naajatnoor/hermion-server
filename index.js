@@ -1,6 +1,6 @@
 
 import express from "express";
-import { MongoClient } from "mongodb";
+import { MongoClient,ObjectId } from "mongodb";
 import cors from "cors";
 import "dotenv/config";
 
@@ -62,6 +62,14 @@ app.get("/createEvent", async (req, res) => {
       message: "Failed to get events",
     });
   }
+});
+
+app.get("/createEvent/:id", async (req, res) => {
+  const { id } = req.params;
+  console.log(id);
+  const result = await createEventCollection.findOne({_id: new ObjectId(id),
+  });  
+  res.send({result});
 });
 
 
